@@ -18,14 +18,18 @@ var storage = app.storage();
 var databaseRef = database.ref().child("message");
 
 //Firebase logged state
-firebase.auth().onAuthStateChanged(firebaseUser => {
-    if (firebaseUser) {
-        console.log(firebaseUser);
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        console.log(user);
+        var firebaseUser = firebase.auth().currentUser;
         logOutBtn.classList.remove("hide");
         singinBtn.classList.add("hide");
         signUpBtn.classList.add("hide");
         loginSpot.classList.add("hide");
         gameSection.classList.remove("hide");
+        email = user.email;
+        sendMsg(email);
+
     }
     else {
         console.log("not logged in");
@@ -41,36 +45,31 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 
 
 //Chat box here
-
-$("#sendButton").on("click", function(event) {
-    event.preventDefault();
-    var chat = {message: $("#sendMessage").val(),
-    email: firebase.auth().currentUser.email
-    };
-    databaseRef.push().set(chat);
-    $("#sendMessage").val("");  
-});
+function sendMsg() {
+    $("#sendButton").on("click", function(event) {
+        event.preventDefault();
+        var message = $("#sendMessage").val();
+        email = firebase.auth().currentUser.email;
+        chat = email + ": " + message
+        databaseRef.push().set(chat);
+        $("#sendMessage").val("");  
+    });
+}
 
 $("#sendButton").on("keyup", function(event) {
     event.preventDefault();
     if (event.keyCode === 13) {
-        // Trigger the button element with a click
-        document.getElementById("myBtn").click();
-        var message = {
-            message: $("#sendMessage").val(),
-            email: firebase.auth().currentUser.email
-        };
-        databaseRef.push().set(message);
-        $("#sendMessage").val(""); 
+        var message = $("#sendMessage").val();
+        email = firebase.auth().currentUser.email;
+        chat = email + ": " + message
+        databaseRef.push().set(chat);
+        $("#sendMessage").val("");
     } 
 });
 
-databaseRef.on("value", function(snapshot) {
-    // var chat = snapshot.val();
-    // console.log("chat");
-    // console.dir(message.email);
-    // console.dir(message.message);
-    $("#chatBox").append("<li>" + snapshot.message.email + ": " + snapshot.message.message + "</li>");
+databaseRef.on("child_added", function(snapshot) {
+    var chat = snapshot.val();
+    $("#chatBox").append("<li>" + ": " + chat + "</li>");
 
 })
 
@@ -86,12 +85,11 @@ databaseRef.on("value", function(snapshot) {
 });
 
 $("#signUpBtn").on("click", function(event) {
-    event.preventDefault();
+    event.preventDefault(); event.preventDefault();
     var email = $("#emailAddress").val();
     var pass = $("#userPW").val();
     var auth = firebase.auth();
     var promise = auth.createUserWithEmailAndPassword(email, pass);
-    $("#displayNme").val("");
     $("#emailAddress").val("");
     $("#userPW").val("");
 });
