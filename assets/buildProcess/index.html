@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>RPS GAME</title>
+    <!-- Add Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Add CSS-->
+    <link rel="stylesheet" type="text/css" href="assets/style/style.css">
+    <!-- Add JQ-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Add firebase-->
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class = "row">
+                <h1 id = "loginHead">Rock, Paper, Scissor Log in</h1>
+                <form>
+                    <div id = "loginSpot">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="userPW" placeholder="Password">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" id = "singinBtn">Log In</button>
+                    <button type="button" class="btn btn-default" id = "signUpBtn">Sign Up</button>
+                    <button type="button" class="btn btn-default hide" id = "logOutBtn">Log Out</button>
+                </form>  
+        </div>
+        <br>
+        <div class="row">
+            <div class = "col-md-12">
+                <div class = "col-md-9 battleStage">
+                    <div class = "col-md-4" id = "user1"></div>
+                    <div class = "col-md-4" id = "user2"></div>
+                </div>
+                    <div class = "col-md-3">
+                        <h3>Chat</h3>
+                        <ul class = "list-unstyled table-bordered" id = "chatBox"></ul>
+                        <form>  
+                            <div class="form-group">
+                                <label for="inputMessage">Send Message</label>
+                                <input type="text" class="form-control" id="sendMessage" placeholder="Message Here">
+                                <button type="submit" class="btn btn-primary" id = "sendButton">Send</button>
+                            </div>
+                        </form>
+                    </div>
+            </div>
+            <div class = "col-md-9">
+                <div class = "col-md-3 item" id = "ROCK" data-item = "rock">
+                    <img src = "assets/style/images/ROCK.jpg" height: "200"; width="200" data-item = "rock" value = "rock">
+                </div>
+                <div class = "col-md-3 item" id = "PAPER" data-item = "paper">
+                    <img src = "assets/style/images/PAPER.jpg" height = "200", width = "200">
+                </div>
+                <div class = "col-md-3 item" id = "SCISSOR" data-item = "scissor">
+                    <img src = "assets/style/images/SCISSOR.jpg" height="200", width="200">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<script type="text/javascript" src="assets/javascript/game.js"></script>
+</body>
+</html>

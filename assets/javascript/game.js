@@ -17,20 +17,88 @@ var storage = app.storage();
 //Get a reference to our chat "room" in the data base
 var databaseRef = database.ref().child("message");
 
+//Firebase logged state
+firebase.auth().onAuthStateChanged(firebaseUser => {
+    if (firebaseUser) {
+        console.log(firebaseUser);
+        logOutBtn.classList.remove("hide");
+        singinBtn.classList.add("hide");
+        signUpBtn.classList.add("hide");
+        loginSpot.classList.add("hide");
+        gameSection.classList.remove("hide");
+    }
+    else {
+        console.log("not logged in");
+        logOutBtn.classList.add("hide");
+        singinBtn.classList.remove("hide");
+        signUpBtn.classList.remove("hide");
+        loginSpot.classList.remove("hide");
+        gameSection.classList.add("hide");
+
+    }
+});
+
+
+
 //Chat box here
 
 $("#sendButton").on("click", function(event) {
     event.preventDefault();
-    var message = $("#sendMessage").val();
-    databaseRef.push().set(message);
+    var chat = {message: $("#sendMessage").val(),
+    email: firebase.auth().currentUser.email
+    };
+    databaseRef.push().set(chat);
     $("#sendMessage").val("");  
 });
 
-databaseRef.on("child_added", function(snapshot) {
-    var chat = snapshot.val();
-    $("#chatBox").append("<li>" + chat + "</li>");
+$("#sendButton").on("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        // Trigger the button element with a click
+        document.getElementById("myBtn").click();
+        var message = {
+            message: $("#sendMessage").val(),
+            email: firebase.auth().currentUser.email
+        };
+        databaseRef.push().set(message);
+        $("#sendMessage").val(""); 
+    } 
+});
+
+databaseRef.on("value", function(snapshot) {
+    // var chat = snapshot.val();
+    // console.log("chat");
+    // console.dir(message.email);
+    // console.dir(message.message);
+    $("#chatBox").append("<li>" + snapshot.message.email + ": " + snapshot.message.message + "</li>");
 
 })
+
+  $("#singinBtn").on("click", function(event) {
+    event.preventDefault();
+    var email = $("#emailAddress").val();
+    var pass = $("#userPW").val();
+    var auth = firebase.auth();
+    var promise = auth.signInWithEmailAndPassword(email, pass);
+    $("#emailAddress").val("");
+    $("#userPW").val("");
+
+});
+
+$("#signUpBtn").on("click", function(event) {
+    event.preventDefault();
+    var email = $("#emailAddress").val();
+    var pass = $("#userPW").val();
+    var auth = firebase.auth();
+    var promise = auth.createUserWithEmailAndPassword(email, pass);
+    $("#displayNme").val("");
+    $("#emailAddress").val("");
+    $("#userPW").val("");
+});
+
+$("#logOutBtn").on("click", function(event) {
+    firebase.auth().signOut();
+});
 
 var user1 = {
     "wins": "0",
