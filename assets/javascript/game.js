@@ -27,8 +27,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         signUpBtn.classList.add("hide");
         loginSpot.classList.add("hide");
         gameSection.classList.remove("hide");
-        email = user.email;
-        sendMsg(email);
+        var email = user.email;
+        sendMsg();
 
     }
     else {
@@ -50,27 +50,27 @@ function sendMsg() {
         event.preventDefault();
         var message = $("#sendMessage").val();
         email = firebase.auth().currentUser.email;
-        chat = email + ": " + message
+        chat = email + ": " + message;
         databaseRef.push().set(chat);
         $("#sendMessage").val("");  
     });
-}
 
-$("#sendButton").on("keyup", function(event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        var message = $("#sendMessage").val();
-        email = firebase.auth().currentUser.email;
-        chat = email + ": " + message
-        databaseRef.push().set(chat);
-        $("#sendMessage").val("");
-    } 
-});
+
+    $("#sendButton").on("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            var message = $("#sendMessage").val();
+            email = firebase.auth().currentUser.email;
+            chat = email + ": " + message;
+            databaseRef.push().set(chat);
+            $("#sendMessage").val("");
+        } 
+    });
+}
 
 databaseRef.on("child_added", function(snapshot) {
     var chat = snapshot.val();
-    $("#chatBox").append("<li>" + ": " + chat + "</li>");
-
+    $("#chatBox").append("<li>" + chat + "</li>");
 })
 
   $("#singinBtn").on("click", function(event) {
