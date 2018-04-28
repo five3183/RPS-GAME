@@ -16,6 +16,7 @@ var storage = app.storage();
 
 //Get a reference to our chat "room" in the data base
 var databaseRef = database.ref().child("message");
+var gameRef = database.ref().child("game");
 
 //Firebase logged state
 firebase.auth().onAuthStateChanged(function(user) {
@@ -29,6 +30,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         gameSection.classList.remove("hide");
         var email = user.email;
         sendMsg();
+        pushItem(email);
 
     }
     else {
@@ -41,7 +43,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     }
 });
-
 
 
 //Chat box here
@@ -122,14 +123,28 @@ var user2ties = 0;
 var user1Guess 
 var user2Guess
 
+// $("#sendButton").on("click", function(event) {
+//     event.preventDefault();
+//     var message = $("#sendMessage").val();
+//     email = firebase.auth().currentUser.email;
+//     chat = email + ": " + message;
+//     databaseRef.push().set(chat);
+//     $("#sendMessage").val("");  
+// });
+
+function pushItem() {
+    $(".item").on("click", function(event) {
+        $("#stage").append(this);
+        guess = $(this).data("item")
+        console.log(guess)
+        gameRef.push().set({
+            email: email, 
+            guess: guess
+        })
+    })
+}
 
 
-
-$(".item").on("click", function(event) {
-    $("#user1").append(this);
-    guess = $(this).data("item")
-    console.log(guess)
-})
 
 function checkItem() {
     if (user1Guess === "rock" && user2Guess === "scissor") {
