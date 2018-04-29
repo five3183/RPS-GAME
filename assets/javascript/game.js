@@ -49,23 +49,35 @@ firebase.auth().onAuthStateChanged(function(user) {
 function sendMsg() {
     $("#sendButton").on("click", function(event) {
         event.preventDefault();
-        var message = $("#sendMessage").val();
-        email = firebase.auth().currentUser.email;
-        chat = email + ": " + message;
-        databaseRef.push().set(chat);
-        $("#sendMessage").val("");  
-    });
-
-
-    $("#sendButton").on("keyup", function(event) {
-        event.preventDefault();
-        if (event.keyCode === 13) {
+        if ($("#sendMessage").val() === ("")) {
+            alert("Message must be filled out");
+            return false;
+        }
+        else { 
             var message = $("#sendMessage").val();
             email = firebase.auth().currentUser.email;
             chat = email + ": " + message;
             databaseRef.push().set(chat);
             $("#sendMessage").val("");
-        } 
+        }
+    });
+
+
+    $("#sendButton").on("keyup", function(event) {
+        event.preventDefault();
+        if ($("#sendMessage").val() === ("")) {
+            alert("Message must be filled out");
+            return false;
+        }
+        else {
+            if (event.keyCode === 13) {
+            var message = $("#sendMessage").val();
+            email = firebase.auth().currentUser.email;
+            chat = email + ": " + message;
+            databaseRef.push().set(chat);
+            $("#sendMessage").val("");
+            } 
+        }
     });
 }
 
@@ -123,15 +135,6 @@ var user2ties = 0;
 var user1Guess 
 var user2Guess
 
-// $("#sendButton").on("click", function(event) {
-//     event.preventDefault();
-//     var message = $("#sendMessage").val();
-//     email = firebase.auth().currentUser.email;
-//     chat = email + ": " + message;
-//     databaseRef.push().set(chat);
-//     $("#sendMessage").val("");  
-// });
-
 function pushItem() {
     $(".item").on("click", function(event) {
         $("#stage").append(this);
@@ -143,6 +146,11 @@ function pushItem() {
         })
     })
 }
+
+gameRef.on("child_added", function(snapshot) {
+    var guess = snapshot.val();
+    $("#battleStage").append(guess);
+})
 
 
 
