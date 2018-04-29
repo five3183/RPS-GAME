@@ -148,10 +148,23 @@ function pushItem() {
 }
 
 gameRef.on("child_added", function(snapshot) {
+    email = firebase.auth().currentUser.email;
     var guess = snapshot.val();
-    $("#battleStage").append(guess);
+    userGuess = {
+        guess: guess.guess,
+        email: guess.email
+    }
+    $("#battleStage").append("<p>" + guess.email + ": " + guess.guess + "<p>");
+    checkItem();
 })
 
+if(userGuess.email = "five3183@gmail.com"){
+    user1Guess = userGuess.guess
+    console.log(user1Guess);
+}
+else {
+    user2Guess = userGuess.guess
+}
 
 
 function checkItem() {
